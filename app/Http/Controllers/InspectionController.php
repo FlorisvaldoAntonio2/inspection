@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Inspection;
 use App\Http\Requests\StoreInspectionRequest;
 use App\Http\Requests\UpdateInspectionRequest;
+use App\Models\User;
 
 class InspectionController extends Controller
 {
@@ -23,7 +24,10 @@ class InspectionController extends Controller
      */
     public function create()
     {
-        return view('pages.inspections.create');
+
+        return view('pages.inspections.create', [
+            'operators' => User::where('role', '=', '2')->get(),
+        ]);
     }
 
     /**
@@ -31,9 +35,12 @@ class InspectionController extends Controller
      */
     public function store(StoreInspectionRequest $request)
     {
-        $data = $request->validated();
+        $selectedOperators = $request->input('operators');
+        $data = $request->except('operators');
 
         $inspection = Inspection::create($data);
+
+        $inspection->users()->attach($selectedOperators);
 
         return redirect()->route('inspection.index')->with(['message' => 'Inspeção cadastrada com Sucesso', 'type' => 'success']);
 
@@ -54,8 +61,18 @@ class InspectionController extends Controller
      */
     public function edit(Inspection $inspection)
     {
+        $operatorsAll = User::where('role', '=', '2')->get();
+        $operatorsSelected = $inspection->load('users');
+        
+        //novo array com todos os operadores e um campo para saber se está selecionado ou não
+        $operators = $operatorsAll->map(function ($operator) use ($operatorsSelected) {
+            $operator->selected = $operatorsSelected->users->contains($operator);
+            return $operator;
+        });
+
         return view('pages.inspections.edit', [
             'inspection' => $inspection,
+            'operators' => $operators
         ]);
     }
 
@@ -64,9 +81,14 @@ class InspectionController extends Controller
      */
     public function update(UpdateInspectionRequest $request, Inspection $inspection)
     {
-        $data = $request->validated();
+        $selectedOperators = $request->input('operators');
+        $data = $request->except('operators');
 
         $inspection->update($data);
+
+        $inspection->users()->detach();
+
+        $inspection->users()->attach($selectedOperators);
 
         return redirect()->route('inspection.index')->with(['message' => 'Inspeção atualizada com Sucesso', 'type' => 'success']);
     }

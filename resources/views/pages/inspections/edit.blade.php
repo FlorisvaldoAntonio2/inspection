@@ -19,7 +19,7 @@
         {{ $inspection }}
     </pre> --}}
 
-    <h1>cadastro</h1>
+    <h1>Editar inspeção</h1>
     <form action="{{ route('inspection.update', ['inspection' => $inspection->id]) }}" method="POST">
         @csrf
         @method('PATCH')
@@ -39,6 +39,16 @@
 
         <label for="quantity_pieces">Quantidade de peças:</label>
         <input type="number" name="quantity_pieces" id="quantity_pieces" value="{{$inspection->quantity_pieces}}">
+
+         {{-- checkbox com todos os nomes de operators --}}
+        
+         <label class="form-label" for="operators">Operadores que será inseridos nesta inspeção:</label>
+         @foreach ($operators as $operator)
+             <div class="form-check form-switch">
+                 <input class="form-check-input" type="checkbox" name="operators[]" id="operators-{{$operator->id}}" value="{{$operator->id}}" {{$operator->selected ? 'checked' : ''}}>
+                 <label class="form-check-label" for="operators-{{$operator->id}}">{{$operator->name}}</label>
+             </div>
+         @endforeach
 
         <input type="submit" value="Atualizar">
     </form>

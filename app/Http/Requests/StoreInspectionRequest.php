@@ -27,6 +27,7 @@ class StoreInspectionRequest extends FormRequest
             'inspection_end' => ['required', 'date'],
             'attempts_per_operator' => ['required', 'integer'],
             'quantity_pieces' => ['required', 'integer'],
+            'operators' => ['required', 'array'],
         ];
     }
 }

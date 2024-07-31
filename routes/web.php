@@ -13,10 +13,18 @@ Route::prefix('inspection')->group(function () {
             Route::get('/create', 'create')->name('inspection.create');
             Route::get('/', 'index')->name('inspection.index');
             Route::post('/', 'store')->name('inspection.store');
-            Route::get('/{id}', 'show')->name('inspection.show');
-            Route::get('/edit/{id}', 'edit')->name('inspection.edit');
-            Route::patch('/{id}', 'update')->name('inspection.update');
-            Route::delete('/{id}', 'delete')->name('inspection.delete');
+            Route::get('/{inspection}', 'show')->name('inspection.show')->missing(function () {
+                return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
+            });
+            Route::get('/edit/{inspection}', 'edit')->name('inspection.edit')->missing(function () {
+                return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
+            });;
+            Route::patch('/{inspection}', 'update')->name('inspection.update')->missing(function () {
+                return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
+            });;
+            Route::delete('/{inspection}', 'destroy')->name('inspection.destroy')->missing(function () {
+                return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
+            });;
         });
     });
 });

@@ -11,7 +11,7 @@ class UpdateInspectionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class UpdateInspectionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'description' => ['required', 'string', 'min:3', 'max:1000'],
+            'inspection_start' => ['required', 'date'],
+            'inspection_end' => ['required', 'date'],
+            'attempts_per_operator' => ['required', 'integer'],
+            'quantity_pieces' => ['required', 'integer'],
         ];
     }
 }

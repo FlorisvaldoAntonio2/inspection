@@ -23,7 +23,7 @@ class InspectionController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.inspections.create');
     }
 
     /**
@@ -31,7 +31,12 @@ class InspectionController extends Controller
      */
     public function store(StoreInspectionRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $inspection = Inspection::create($data);
+
+        return redirect()->route('inspection.index')->with(['message' => 'Inspeção cadastrada com Sucesso', 'type' => 'success']);
+
     }
 
     /**
@@ -39,7 +44,9 @@ class InspectionController extends Controller
      */
     public function show(Inspection $inspection)
     {
-        //
+        return view('pages.inspections.show', [
+            'inspection' => $inspection,
+        ]);
     }
 
     /**
@@ -47,7 +54,9 @@ class InspectionController extends Controller
      */
     public function edit(Inspection $inspection)
     {
-        //
+        return view('pages.inspections.edit', [
+            'inspection' => $inspection,
+        ]);
     }
 
     /**
@@ -55,7 +64,11 @@ class InspectionController extends Controller
      */
     public function update(UpdateInspectionRequest $request, Inspection $inspection)
     {
-        //
+        $data = $request->validated();
+
+        $inspection->update($data);
+
+        return redirect()->route('inspection.index')->with(['message' => 'Inspeção atualizada com Sucesso', 'type' => 'success']);
     }
 
     /**
@@ -63,6 +76,8 @@ class InspectionController extends Controller
      */
     public function destroy(Inspection $inspection)
     {
-        //
+        $inspection->delete();
+
+        return redirect()->route('inspection.index')->with(['message' => 'Inspeção deletada com Sucesso', 'type' => 'success']);
     }
 }

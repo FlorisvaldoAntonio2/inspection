@@ -2,11 +2,58 @@
 @extends('layouts.base')
 
 {{-- titulo da pagina --}}
-@section('title', 'Teste')
+@section('title', 'Inspeções')
 
 {{-- conteudo da pagina --}}
 @section('content')
-    <h1>Teste</h1>
-    <p>Testando a pagina teste</p>
+
+    @if(session('message'))
+        @includeIf('partials.alert', ['message' => session('message'), 'type' => session('type')])
+    @endif
+
+    @if ($errors->any())
+        @include('partials.errors')
+    @endif
+
+    <h1>Inspeções</h1>
+    <a href="{{ route('inspection.create') }}" class="btn btn-primary">Cadastrar inspeção</a>
+
+        <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Descrição</th>
+                <th>Início</th>
+                <th>Fim</th>
+                <th>Repetições</th>
+                <th>Peças</th>
+                <th>Data de cadastro</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($inspections as $inspection)
+            <tr>
+                <td>{{ $inspection->id }}</td>
+                <td>{{ $inspection->description }}</td>
+                <td>{{ $inspection->inspection_start }}</td>
+                <td>{{ $inspection->inspection_end }}</td>
+                <td>{{ $inspection->attempts_per_operator }}</td>
+                <td>{{ $inspection->quantity_pieces }}</td>
+                <td>{{ $inspection->created_at }}</td>
+                <td>
+                    <a href="{{ route('inspection.show', ['inspection' => $inspection->id]) }}" class="btn btn-success">Detalhes</a>
+                    <a href="{{ route('inspection.edit', ['inspection' => $inspection->id]) }}" class="btn btn-primary">Editar</a>
+                    <form action="{{ route('inspection.destroy', ['inspection' => $inspection->id]) }}" method="POST">
+                        @csrf
+                        @method('delete')
+                        <button type="submit" class="btn btn-danger">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    
 @endsection
 

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('inspections', function (Blueprint $table) {
             $table->id();
-            $table->string('description')->nullable(false);
+            $table->string('description', 1000)->nullable(false);
             $table->timestamp('inspection_start')->nullable(false);
             $table->timestamp('inspection_end')->nullable(false);
             $table->integer('attempts_per_operator')->nullable(false);

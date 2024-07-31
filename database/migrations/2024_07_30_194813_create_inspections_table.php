@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('inspection_end')->nullable(false);
             $table->integer('attempts_per_operator')->nullable(false);
             $table->integer('quantity_pieces')->nullable(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

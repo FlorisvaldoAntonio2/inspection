@@ -37,12 +37,16 @@
         {{-- checkbox com todos os nomes de operators --}}
         
         <label class="form-label" for="operators">Operadores que será inseridos nesta inspeção:</label>
-        @foreach ($operators as $operator)
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" name="operators[]" id="operators-{{$operator->id}}" value="{{$operator->id}}" checked>
-                <label class="form-check-label" for="operators-{{$operator->id}}">{{$operator->name}}</label>
-            </div>
-        @endforeach
+        @if ($operators->isEmpty())
+            <p>Não há operadores cadastrados</p>
+        @else
+            @foreach ($operators as $operator)
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="operators[]" id="operators-{{$operator->id}}" value="{{$operator->id}}" checked>
+                    <label class="form-check-label" for="operators-{{$operator->id}}">{{$operator->name}}</label>
+                </div>
+            @endforeach
+        @endif
 
         <input type="submit" value="Cadastrar">
     </form>

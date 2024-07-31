@@ -22,4 +22,9 @@ class Inspection extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function parts()
+    {
+        return $this->hasMany(Parts::class);
+    }
 }

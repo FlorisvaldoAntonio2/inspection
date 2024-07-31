@@ -1,9 +1,26 @@
 <?php
 
+use App\Http\Controllers\InspectionController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/test', function () {
+
+Route::prefix('inspection')->group(function () {
+
+    Route::middleware(['auth', 'verified'])->group(function () {
+
+        Route::controller(App\Http\Controllers\InspectionController::class)->group(function () {
+            Route::get('/create', 'create')->name('inspection.create');
+            Route::get('/', 'index')->name('inspection.index');
+            Route::post('/', 'store')->name('inspection.store');
+            Route::get('/{id}', 'show')->name('inspection.show');
+            Route::get('/edit/{id}', 'edit')->name('inspection.edit');
+            Route::patch('/{id}', 'update')->name('inspection.update');
+            Route::delete('/{id}', 'delete')->name('inspection.delete');
+        });
+    });
+});
+Route::get('/', function () {
     return view('pages/teste');
 });
 

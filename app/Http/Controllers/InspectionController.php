@@ -13,7 +13,9 @@ class InspectionController extends Controller
      */
     public function index()
     {
-        //
+        return view('pages.inspections.index', [
+            'inspections' => Inspection::all(),
+        ]);
     }
 
     /**

@@ -14,8 +14,9 @@ class InspectionController extends Controller
      */
     public function index()
     {
+        $inspections = Inspection::all()->load('parts');
         return view('pages.inspections.index', [
-            'inspections' => Inspection::all(),
+            'inspections' => $inspections,
         ]);
     }
 
@@ -101,5 +102,21 @@ class InspectionController extends Controller
         $inspection->delete();
 
         return redirect()->route('inspection.index')->with(['message' => 'Inspeção deletada com Sucesso', 'type' => 'success']);
+    }
+
+    public function enabled(Inspection $inspection)
+    {
+        $inspection->enabled = true;
+        $inspection->save();
+
+        return redirect()->route('inspection.index')->with(['message' => 'Inspeção liberada com Sucesso', 'type' => 'success']);
+    }
+
+    public function disabled(Inspection $inspection)
+    {
+        $inspection->enabled = false;
+        $inspection->save();
+
+        return redirect()->route('inspection.index')->with(['message' => 'Inspeção desabilitada com Sucesso', 'type' => 'success']);
     }
 }

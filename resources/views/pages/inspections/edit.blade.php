@@ -37,8 +37,8 @@
         <label for="attempts_per_operator">Nº de repetições:</label>
         <input type="number" name="attempts_per_operator" id="attempts_per_operator" value="{{$inspection->attempts_per_operator}}">
 
-        <label for="quantity_pieces">Quantidade de peças:</label>
-        <input type="number" name="quantity_pieces" id="quantity_pieces" value="{{$inspection->quantity_pieces}}">
+        {{-- <label for="quantity_pieces">Quantidade de peças:</label>
+        <input type="number" name="quantity_pieces" id="quantity_pieces" value="{{$inspection->quantity_pieces}}"> --}}
 
          {{-- checkbox com todos os nomes de operators --}}
         

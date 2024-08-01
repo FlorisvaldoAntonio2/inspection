@@ -17,7 +17,8 @@ return new class extends Migration
             $table->timestamp('inspection_start')->nullable(false);
             $table->timestamp('inspection_end')->nullable(false);
             $table->integer('attempts_per_operator')->nullable(false);
-            $table->integer('quantity_pieces')->nullable(false);
+            $table->integer('quantity_pieces')->nullable(true);
+            $table->boolean('enabled')->default(false); //liberada para inspeção dos operadores
             $table->softDeletes();
             $table->timestamps();
         });

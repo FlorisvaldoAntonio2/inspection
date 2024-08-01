@@ -26,7 +26,8 @@ class UpdateInspectionRequest extends FormRequest
             'inspection_start' => ['required', 'date'],
             'inspection_end' => ['required', 'date'],
             'attempts_per_operator' => ['required', 'integer'],
-            'quantity_pieces' => ['required', 'integer'],
+            'quantity_pieces' => ['integer'],
+            'operators' => ['required', 'array'],
         ];
     }
 }

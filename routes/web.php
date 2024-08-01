@@ -18,10 +18,16 @@ Route::prefix('inspection')->group(function () {
             });
             Route::get('/edit/{inspection}', 'edit')->name('inspection.edit')->missing(function () {
                 return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
-            });;
+            });
+            Route::patch('/enabled/{inspection}', 'enabled')->name('inspection.enabled')->missing(function () {
+                return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
+            });
+            Route::patch('/disabled/{inspection}', 'disabled')->name('inspection.disabled')->missing(function () {
+                return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
+            });
             Route::patch('/{inspection}', 'update')->name('inspection.update')->missing(function () {
                 return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
-            });;
+            });
             Route::delete('/{inspection}', 'destroy')->name('inspection.destroy')->missing(function () {
                 return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
             });
@@ -37,7 +43,7 @@ Route::prefix('part')->group(function () {
             //cadastrar uma peça em uma inspeção
             Route::get('/create/{inspection}', 'create')->name('part.create')->missing(function () {
                 return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
-            });;
+            });
             Route::post('/', 'store')->name('part.store');
             Route::delete('/{part}', 'destroy')->name('part.destroy')->missing(function () {
                 return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');

@@ -15,7 +15,7 @@ class Inspection extends Model
         'inspection_start',
         'inspection_end',
         'attempts_per_operator',
-        'quantity_pieces',
+        'enabled',
     ];
 
     public function users()

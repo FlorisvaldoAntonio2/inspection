@@ -31,8 +31,8 @@
         <label class="form-label" for="attempts_per_operator">Nº de repetições:</label>
         <input class="form-control" type="number" name="attempts_per_operator" id="attempts_per_operator">
 
-        <label class="form-label" for="quantity_pieces">Quantidade de peças:</label>
-        <input class="form-control" type="number" name="quantity_pieces" id="quantity_pieces">
+        {{-- <label class="form-label" for="quantity_pieces">Quantidade de peças:</label>
+        <input class="form-control" type="number" name="quantity_pieces" id="quantity_pieces"> --}}
 
         {{-- checkbox com todos os nomes de operators --}}
         

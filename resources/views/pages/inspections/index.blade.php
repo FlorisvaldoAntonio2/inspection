@@ -47,6 +47,7 @@
                     <td>
                         <a href="{{ route('inspection.show', ['inspection' => $inspection->id]) }}" class="btn btn-success">Detalhes</a>
                         <a href="{{ route('inspection.edit', ['inspection' => $inspection->id]) }}" class="btn btn-primary">Editar</a>
+                        <a href="{{ route('part.create', ['inspection' => $inspection->id]) }}" class="btn btn-warning">Adicionar Peças</a>
                         <form action="{{ route('inspection.destroy', ['inspection' => $inspection->id]) }}" method="POST">
                             @csrf
                             @method('delete')

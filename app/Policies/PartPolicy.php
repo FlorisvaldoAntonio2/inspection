@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Parts;
+use App\Models\Part;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class PartsPolicy
+class PartPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class PartsPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Parts $parts): bool
+    public function view(User $user, Part $parts): bool
     {
         //
     }
@@ -35,7 +35,7 @@ class PartsPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Parts $parts): bool
+    public function update(User $user, Part $parts): bool
     {
         //
     }
@@ -43,7 +43,7 @@ class PartsPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Parts $parts): bool
+    public function delete(User $user, Part $parts): bool
     {
         //
     }
@@ -51,7 +51,7 @@ class PartsPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Parts $parts): bool
+    public function restore(User $user, Part $parts): bool
     {
         //
     }
@@ -59,7 +59,7 @@ class PartsPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Parts $parts): bool
+    public function forceDelete(User $user, Part $parts): bool
     {
         //
     }

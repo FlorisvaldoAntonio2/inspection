@@ -24,13 +24,28 @@ Route::prefix('inspection')->group(function () {
             });;
             Route::delete('/{inspection}', 'destroy')->name('inspection.destroy')->missing(function () {
                 return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
-            });;
+            });
         });
     });
 });
-Route::get('/', function () {
-    return view('pages/teste');
+
+Route::prefix('part')->group(function () {
+
+    Route::middleware(['auth', 'verified'])->group(function () {
+
+        Route::controller(App\Http\Controllers\PartController::class)->group(function () {
+            //cadastrar uma peça em uma inspeção
+            Route::get('/create/{inspection}', 'create')->name('part.create')->missing(function () {
+                return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
+            });;
+            Route::post('/', 'store')->name('part.store');
+            Route::delete('/{part}', 'destroy')->name('part.destroy')->missing(function () {
+                return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
+            });
+        });
+    });
 });
+
 
 Route::get('/', function () {
     return view('welcome');

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('code', 100);
             $table->string('description', 1000);
             $table->enum('status', ['good', 'bad'])->default('good');
+            $table->softDeletes();
             $table->foreignId('inspection_id')->constrained();
             $table->timestamps();
         });

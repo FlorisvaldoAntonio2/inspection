@@ -36,7 +36,7 @@ class PartController extends Controller
     {
         $data = $request->validated();
         Part::create($data);
-        return redirect()->route('parts.create', ['inspection' => $data['inspection_id']]);
+        return redirect()->route('part.create', ['inspection' => $data['inspection_id']])->with(['message' => 'Peça adicionada com sucesso', 'type' => 'success']);
     }
 
     /**
@@ -68,6 +68,7 @@ class PartController extends Controller
      */
     public function destroy(Part $part)
     {
-        //
+        $part->delete();
+        return redirect()->route('part.create', ['inspection' => $part->inspection_id])->with(['message' => 'Peça removida com sucesso', 'type' => 'success']);
     }
 }

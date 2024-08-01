@@ -6,6 +6,8 @@ use App\Models\Inspection;
 use App\Http\Requests\StoreInspectionRequest;
 use App\Http\Requests\UpdateInspectionRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class InspectionController extends Controller
 {
@@ -14,8 +16,20 @@ class InspectionController extends Controller
      */
     public function index()
     {
+        //operator
+        if (!Gate::allows('is_admin')) {
+            $inspections = Inspection::whereHas('users', function ($query) {
+                $query->where('user_id', Auth::id());
+            })->where('enabled', true)->with('parts')->get();
+
+            return view('pages.operator.inspections.index', [
+                'inspections' => $inspections,
+            ]);
+        }
+
+        //admin
         $inspections = Inspection::all()->load('parts');
-        return view('pages.inspections.index', [
+        return view('pages.admin.inspections.index', [
             'inspections' => $inspections,
         ]);
     }
@@ -25,8 +39,11 @@ class InspectionController extends Controller
      */
     public function create()
     {
+        if(!Gate::allows('is_admin')){
+            return redirect()->route('dashboard')->with(['message' => 'Você não tem permissão para acessar essa página', 'type' => 'danger']);
+        }
 
-        return view('pages.inspections.create', [
+        return view('pages.admin.inspections.create', [
             'operators' => User::where('role', '=', '2')->get(),
         ]);
     }
@@ -36,6 +53,10 @@ class InspectionController extends Controller
      */
     public function store(StoreInspectionRequest $request)
     {
+        if(!Gate::allows('is_admin')){
+            return redirect()->route('dashboard')->with(['message' => 'Você não tem permissão para acessar essa página', 'type' => 'danger']);
+        }
+
         $selectedOperators = $request->input('operators');
         $data = $request->except('operators');
 
@@ -52,7 +73,11 @@ class InspectionController extends Controller
      */
     public function show(Inspection $inspection)
     {
-        return view('pages.inspections.show', [
+        if(!Gate::allows('is_admin')){
+            return redirect()->route('dashboard')->with(['message' => 'Você não tem permissão para acessar essa página', 'type' => 'danger']);
+        }
+
+        return view('pages.admin.inspections.show', [
             'inspection' => $inspection,
         ]);
     }
@@ -62,6 +87,10 @@ class InspectionController extends Controller
      */
     public function edit(Inspection $inspection)
     {
+        if(!Gate::allows('is_admin')){
+            return redirect()->route('dashboard')->with(['message' => 'Você não tem permissão para acessar essa página', 'type' => 'danger']);
+        }
+
         $operatorsAll = User::where('role', '=', '2')->get();
         $operatorsSelected = $inspection->load('users');
         
@@ -71,7 +100,7 @@ class InspectionController extends Controller
             return $operator;
         });
 
-        return view('pages.inspections.edit', [
+        return view('pages.admin.inspections.edit', [
             'inspection' => $inspection,
             'operators' => $operators
         ]);
@@ -82,6 +111,10 @@ class InspectionController extends Controller
      */
     public function update(UpdateInspectionRequest $request, Inspection $inspection)
     {
+        if(!Gate::allows('is_admin')){
+            return redirect()->route('dashboard')->with(['message' => 'Você não tem permissão para acessar essa página', 'type' => 'danger']);
+        }
+
         $selectedOperators = $request->input('operators');
         $data = $request->except('operators');
 
@@ -99,6 +132,10 @@ class InspectionController extends Controller
      */
     public function destroy(Inspection $inspection)
     {
+        if(!Gate::allows('is_admin')){
+            return redirect()->route('dashboard')->with(['message' => 'Você não tem permissão para acessar essa página', 'type' => 'danger']);
+        }
+
         $inspection->delete();
 
         return redirect()->route('inspection.index')->with(['message' => 'Inspeção deletada com Sucesso', 'type' => 'success']);
@@ -106,6 +143,10 @@ class InspectionController extends Controller
 
     public function enabled(Inspection $inspection)
     {
+        if(!Gate::allows('is_admin')){
+            return redirect()->route('dashboard')->with(['message' => 'Você não tem permissão para acessar essa página', 'type' => 'danger']);
+        }
+
         $inspection->enabled = true;
         $inspection->save();
 
@@ -114,6 +155,10 @@ class InspectionController extends Controller
 
     public function disabled(Inspection $inspection)
     {
+        if(!Gate::allows('is_admin')){
+            return redirect()->route('dashboard')->with(['message' => 'Você não tem permissão para acessar essa página', 'type' => 'danger']);
+        }
+
         $inspection->enabled = false;
         $inspection->save();
 

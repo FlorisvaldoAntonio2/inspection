@@ -6,6 +6,7 @@ use App\Models\Part;
 use App\Http\Requests\StorePartRequest;
 use App\Http\Requests\UpdatePartRequest;
 use App\Models\Inspection;
+use Illuminate\Support\Facades\Gate;
 
 class PartController extends Controller
 {
@@ -22,8 +23,12 @@ class PartController extends Controller
      */
     public function create(Inspection $inspection)
     {
+        if(!Gate::allows('is_admin')){
+            return redirect()->route('dashboard')->with(['message' => 'Você não tem permissão para acessar essa página', 'type' => 'danger']);
+        }
+        
         $parts = Part::all()->where('inspection_id', '=', $inspection->id);
-        return view('pages.parts.create', [
+        return view('pages.admin.parts.create', [
             'inspection' => $inspection,
             'parts' => $parts,
         ]);
@@ -34,6 +39,10 @@ class PartController extends Controller
      */
     public function store(StorePartRequest $request)
     {
+        if(!Gate::allows('is_admin')){
+            return redirect()->route('dashboard')->with(['message' => 'Você não tem permissão para acessar essa página', 'type' => 'danger']);
+        }
+
         $data = $request->validated();
         Part::create($data);
         return redirect()->route('part.create', ['inspection' => $data['inspection_id']])->with(['message' => 'Peça adicionada com sucesso', 'type' => 'success']);
@@ -68,6 +77,10 @@ class PartController extends Controller
      */
     public function destroy(Part $part)
     {
+        if(!Gate::allows('is_admin')){
+            return redirect()->route('dashboard')->with(['message' => 'Você não tem permissão para acessar essa página', 'type' => 'danger']);
+        }
+
         $part->delete();
         return redirect()->route('part.create', ['inspection' => $part->inspection_id])->with(['message' => 'Peça removida com sucesso', 'type' => 'success']);
     }

@@ -38,7 +38,14 @@ class InspectionController extends Controller
         }
 
         //admin
-        $inspections = Inspection::all()->load('parts');
+        $inspections = Inspection::with('parts', 'users', 'responses')->get();
+
+        //entre as respostas identificar a quantidade de usuários que responderam
+        $inspections = $inspections->map(function ($inspection) {
+            $inspection->users_answered = $inspection->responses->groupBy('user_id')->count();
+            return $inspection;
+        });
+
         return view('pages.admin.inspections.index', [
             'inspections' => $inspections,
         ]);

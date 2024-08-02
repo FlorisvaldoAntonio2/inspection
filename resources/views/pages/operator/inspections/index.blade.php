@@ -81,7 +81,7 @@
                     <td>{{ count($inspection->parts) }}</td>
                     <td>{{ $inspection->created_at }}</td>
                     <td>
-                        <a href="{{ route('response.new', ['inspection' => $inspection->id])}}" class="btn btn-primary">Revisar</a>        
+                        <a href="{{ route('respose.show.operator', ['inspection' => $inspection->id])}}" class="btn btn-primary">Revisar</a>        
                     </td>
                 </tr>
                 @endforeach

@@ -6,6 +6,7 @@ use App\Models\Response;
 use App\Http\Requests\StoreResponseRequest;
 use App\Http\Requests\UpdateResponseRequest;
 use App\Models\Inspection;
+use App\Models\Part;
 
 class ResponseController extends Controller
 {
@@ -78,5 +79,16 @@ class ResponseController extends Controller
     public function destroy(Response $response)
     {
         //
+    }
+
+    public function showResposeOperator(Inspection $inspection)
+    {
+        $responsesOperator = Response::where('inspection_id', '=', $inspection->id)->where('user_id', '=', auth()->user()->id)->get();
+        $responsesSystem = Part::where('inspection_id', '=', $inspection->id)->get();
+        return view('pages.operator.responses.show', [
+            'responsesOperator' => $responsesOperator,
+            'inspection' => $inspection,
+            'responsesSystem' => $responsesSystem,
+        ]);
     }
 }

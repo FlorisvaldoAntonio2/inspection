@@ -57,8 +57,10 @@ Route::prefix('response')->group(function () {
     Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::controller(App\Http\Controllers\ResponseController::class)->group(function () {
-            //cadastrar uma peça em uma inspeção
             Route::get('/new/{inspection}', 'create')->name('response.new')->missing(function () {
+                return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
+            });
+            Route::get('/{inspection}', 'showResposeOperator')->name('respose.show.operator')->missing(function () {
                 return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
             });
             Route::post('/', 'store')->name('response.store');

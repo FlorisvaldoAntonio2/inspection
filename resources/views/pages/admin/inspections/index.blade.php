@@ -30,6 +30,7 @@
                     <th>Fim</th>
                     <th>Repetições</th>
                     <th>Peças</th>
+                    <th>Respostas</th>
                     <th>Data de cadastro</th>
                     <th>Ações</th>
                 </tr>
@@ -43,11 +44,20 @@
                     <td>{{ $inspection->inspection_end }}</td>
                     <td>{{ $inspection->attempts_per_operator }}</td>
                     <td>{{ count($inspection->parts) }}</td>
+                    <td>{{$inspection->users_answered}} / {{ count($inspection->users) }}</td>
                     <td>{{ $inspection->created_at }}</td>
                     <td>
                         <a href="{{ route('inspection.show', ['inspection' => $inspection->id]) }}" class="btn btn-success">Detalhes</a>
-                        <a href="{{ route('inspection.edit', ['inspection' => $inspection->id]) }}" class="btn btn-primary">Editar</a>
-                        <a href="{{ route('part.create', ['inspection' => $inspection->id]) }}" class="btn btn-warning">Gerenciar Peças</a>
+
+                        @if ($inspection->users_answered === 0)
+                            <a href="{{ route('inspection.edit', ['inspection' => $inspection->id]) }}" class="btn btn-primary">Editar</a>
+                            <a href="{{ route('part.create', ['inspection' => $inspection->id]) }}" class="btn btn-warning">Gerenciar Peças</a>
+                            <form action="{{ route('inspection.destroy', ['inspection' => $inspection->id]) }}" method="POST">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="btn btn-danger">Excluir</button>
+                            </form>  
+                        @endif
 
                         @if ($inspection->enabled)
                             <form action="{{ route('inspection.disabled', ['inspection' => $inspection->id]) }}" method="POST">
@@ -62,12 +72,6 @@
                                 <button type="submit" class="btn btn-warning">Liberar para operadores</button>
                             </form>
                         @endif
-                      
-                        <form action="{{ route('inspection.destroy', ['inspection' => $inspection->id]) }}" method="POST">
-                            @csrf
-                            @method('delete')
-                            <button type="submit" class="btn btn-danger">Excluir</button>
-                        </form>
                     </td>
                 </tr>
                 @endforeach

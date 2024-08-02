@@ -21,4 +21,9 @@ class Part extends Model
     {
         return $this->belongsTo(Inspection::class);
     }
+
+    public function responses()
+    {
+        return $this->hasMany(Response::class);
+    }
 }

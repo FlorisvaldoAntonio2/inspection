@@ -52,6 +52,22 @@ Route::prefix('part')->group(function () {
     });
 });
 
+Route::prefix('response')->group(function () {
+
+    Route::middleware(['auth', 'verified'])->group(function () {
+
+        Route::controller(App\Http\Controllers\ResponseController::class)->group(function () {
+            //cadastrar uma peça em uma inspeção
+            Route::get('/new/{inspection}', 'create')->name('response.new')->missing(function () {
+                return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
+            });
+            Route::post('/', 'store')->name('response.store');
+            // Route::delete('/{part}', 'destroy')->name('part.destroy')->missing(function () {
+            //     return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
+            // });
+        });
+    });
+});
 
 Route::get('/', function () {
     return view('welcome');

@@ -18,12 +18,22 @@ class InspectionController extends Controller
     {
         //operator
         if (!Gate::allows('is_admin')) {
-            $inspections = Inspection::whereHas('users', function ($query) {
+            $inspectionsAnswered = Inspection::whereHas('users', function ($query) {
                 $query->where('user_id', Auth::id());
-            })->where('enabled', true)->with('parts')->get();
+            })
+            ->whereHas('responses', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->where('enabled', true)->with('parts')->get();
+
+            $inspectionsNotAnswered = Inspection::whereHas('users', function ($query) {
+                $query->where('user_id', Auth::id());
+            })->doesntHave('responses')
+            ->where('enabled', true)->with('parts')->get();
 
             return view('pages.operator.inspections.index', [
-                'inspections' => $inspections,
+                'inspectionsAnswered' => $inspectionsAnswered,
+                'inspectionsNotAnswered' => $inspectionsNotAnswered,
             ]);
         }
 

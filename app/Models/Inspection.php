@@ -27,4 +27,9 @@ class Inspection extends Model
     {
         return $this->hasMany(Part::class);
     }
+
+    public function responses()
+    {
+        return $this->hasMany(Response::class);
+    }
 }

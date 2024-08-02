@@ -15,7 +15,7 @@
        @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light shadow-sm mb-3">
             <div class="container-fluid">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -26,12 +26,11 @@
                     <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{{route('inspection.index')}}">Inicio</a>
                     </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="{{route('inspection.create')}}">Nova inspeção</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                    </li>
+                    @if (Gate::allows('is_admin'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('inspection.create')}}">Nova inspeção</a>
+                        </li>
+                    @endif
                 </ul>
                 <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -40,8 +39,19 @@
                 </div>
             </div>
         </nav>
-        <div class="container">
+        <div class="container" style="min-height: 80vh">
             @yield('content')
+        </div>
+        {{-- footer sempre no final--}}
+        <div>
+            <footer class="text-center text-white mt-3">
+                <!-- Copyright -->
+                <div class="text-center text-dark p-3">
+                © 2024 Copyright:
+                <a class="text-dark" href="#">Feito por Florisvaldo Junior</a>
+                </div>
+                <!-- Copyright -->
+            </footer>
         </div>
     </body>
 </html>

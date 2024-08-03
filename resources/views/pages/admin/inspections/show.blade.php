@@ -78,24 +78,28 @@
     @if ($inspection->responses->isEmpty())
         <p>Não há respostas</p>
     @else
-    @foreach ($inspection->responses as $response)
-        <table class="table table-striped" id="tableParts">
-            <thead>
-                <tr>
-                    <th colspan="3">Operador: {{strtoupper($response->user->name)}}</th>
-                </tr>
-                <tr>
-                    <th>Código da peça</th>
-                    <th>Resposta</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{$response->part->code}}</td>
-                    <td>{{strtoupper($response->user_opinion_status)}}</td>
-                </tr>
-            </tbody>
-        </table>
+        @foreach ($inspection->users as $user)
+            <table class="table table-striped" id="tableParts">
+                <thead>
+                    <tr>
+                        <th colspan="3">Operador: {{strtoupper($user->name)}}</th>
+                    </tr>
+                    <tr>
+                        <th>Código da peça</th>
+                        <th>Resposta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($inspection->responses as $response)
+                    <tr>
+                        @if($response->user_id == $user->id)
+                            <td>{{$response->part->code}}</td>
+                            <td>{{strtoupper($response->user_opinion_status)}}</td>
+                        @endif
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         @endforeach
     @endif
 @endsection

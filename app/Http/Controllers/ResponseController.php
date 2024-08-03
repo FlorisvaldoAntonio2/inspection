@@ -23,8 +23,21 @@ class ResponseController extends Controller
      */
     public function create(Inspection $inspection)
     {
+        $attempt = 1;
+        //verificar se o usuário já respondeu a inspeção
+        $responsesUser = Response::where('inspection_id', '=', $inspection->id)->where('user_id', '=', auth()->user()->id)->get();
+        //deve ter alguma resposta
+        if($responsesUser->count() > 0){
+            $attempt = $responsesUser->max('attempt') + 1;
+        }
+        
+        if($attempt > $inspection->attempts_per_operator){
+            return redirect()->route('inspection.index')->with(['message' => 'Você já respondeu essa inspeção', 'type' => 'warning']);
+        }
+
         return view('pages.operator.responses.create', [
             'inspection' => $inspection,
+            'attempt' => $attempt,
         ]);
     }
 
@@ -33,8 +46,8 @@ class ResponseController extends Controller
      */
     public function store(StoreResponseRequest $request)
     {
-        $responsesParts = $request->except(['_token', '_method', 'inspection_id']);
-        $inspection_id = $request->inspection_id;
+        $responsesParts = $request->except(['_token', '_method', 'inspection_id', 'attempt']);
+   
         foreach ($responsesParts as $key => $value) {
             //remove 'part_' from key
             $key = substr($key, 5);
@@ -42,8 +55,8 @@ class ResponseController extends Controller
                 'part_id' => $key,
                 'user_opinion_status' => $value,
                 'user_id' => auth()->user()->id,
-                'inspection_id' => $inspection_id,
-                'attempt' => 1,
+                'inspection_id' => $request->inspection_id,
+                'attempt' => $request->attempt,
             ]);
         }
 

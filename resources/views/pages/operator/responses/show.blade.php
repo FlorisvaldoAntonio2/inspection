@@ -17,16 +17,25 @@
 
     <h1>Revisar respostas</h1>
 
-    <h1>Suas respostas</h1>
-    @foreach ($responsesOperator as $response)
-        <h2>Peça de código: {{$response->part->code}}</h2>
-        <p>Status: {{$response->user_opinion_status}}</p>
-    @endforeach
-
-    <h1>Suas respostas esperadas</h1>
-    @foreach ($responsesSystem as $part)
-        <h2>Peça de código: {{$part->code}}</h2>
-        <p>Status: {{$part->status}}</p>
-    @endforeach
+    <div class="row">
+        <div class="col-md-6 border p-3">
+            <h3>Suas respostas</h3>
+            @foreach ($responsesOperator as $response)
+                <h4>Código da peça: {{$response->part->code}}</h4>
+                <p>
+                    Status: <span class="{{$response->user_opinion_status === 'good' ? 'text-success' : 'text-danger'}}">{{strtoupper($response->user_opinion_status)}}</span>
+                </p>
+            @endforeach
+        </div>
+        <div class="col-md-6 border p-3">
+            <h3>Respostas esperadas</h3>
+            @foreach ($responsesSystem as $part)
+                <h4>Código da peça: {{$part->code}}</h4>
+                <p>
+                    Status: <span class="{{$part->status === 'good' ? 'text-success' : 'text-danger'}}">{{strtoupper($part->status)}}</span>
+                </p>
+            @endforeach
+        </div>
+    </div>
 @endsection
 

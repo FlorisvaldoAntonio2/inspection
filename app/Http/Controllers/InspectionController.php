@@ -28,7 +28,9 @@ class InspectionController extends Controller
 
             $inspectionsNotAnswered = Inspection::whereHas('users', function ($query) {
                 $query->where('user_id', Auth::id());
-            })->doesntHave('responses')
+            })->whereDoesntHave('responses', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
             ->where('enabled', true)->with('parts')->get();
 
             return view('pages.operator.inspections.index', [
@@ -95,7 +97,11 @@ class InspectionController extends Controller
         }
 
         return view('pages.admin.inspections.show', [
-            'inspection' => $inspection,
+            'inspection' => $inspection->load(
+                'parts',
+                    'responses',
+                    'users',
+            )
         ]);
     }
 

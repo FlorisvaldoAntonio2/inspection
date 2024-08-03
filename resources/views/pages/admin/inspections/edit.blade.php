@@ -2,7 +2,7 @@
 @extends('layouts.base')
 
 {{-- titulo da pagina --}}
-@section('title', 'Cadastrar inspeção')
+@section('title', 'Editar inspeção')
 
 {{-- conteudo da pagina --}}
 @section('content')

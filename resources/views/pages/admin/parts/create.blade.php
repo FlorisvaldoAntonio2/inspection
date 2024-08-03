@@ -34,7 +34,7 @@
                     <tr>
                         <td>{{$part->code}}</td>
                         <td>{{$part->description}}</td>
-                        <td>{{$part->status}}</td>
+                        <td>{{strtoupper($part->status)}}</td>
                         <td>
                             <form action="{{route('part.destroy', ['part' => $part->id])}}" method="POST">
                                 @csrf
@@ -57,19 +57,27 @@
 
             <input type="hidden" name="inspection_id" id="inspection_id" value="{{$inspection->id}}">
         
-            <label class="form-label" for="code">Código</label>
-            <input class="form-control" type="text" name="code" id="code" placeholder="Informe o código da peça">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <label class="form-label" for="code">Código</label>
+                    <input class="form-control" type="text" name="code" id="code" placeholder="Informe o código da peça">
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label" for="status">Status</label>
+                    <select class="form-select" name="status" id="status">
+                        <option value="good">Bom/Good</option>
+                        <option value="bad">Ruim/Bad</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <label class="form-label" for="description">Descrição</label>
+                    <textarea class="form-control" name="description" id="description" cols="30" rows="5" placeholder="Informe uma breve descrição"></textarea>
+                </div>
+            </div>
 
-            <label class="form-label" for="description">Descrição</label>
-            <textarea class="form-control" name="description" id="description" cols="30" rows="5" placeholder="Informe uma breve descrição"></textarea>
-
-            <label class="form-label" for="status">Status</label>
-            <select class="form-select" name="status" id="status">
-                <option value="good">Bom</option>
-                <option value="bad">Ruim</option>
-            </select>
-
-            <input type="submit" value="Adicionar">
+            <input class="btn btn-primary mt-3" type="submit" value="Adicionar">
         </fieldset>
     </form>
 @endsection

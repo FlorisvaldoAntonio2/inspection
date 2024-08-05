@@ -15,7 +15,7 @@
         @include('partials.errors')
     @endif
 
-    <h1>Suas inspeções ainda não respondidas</h1>
+    <h1>Suas inspeções ainda não iniciadas</h1>
 
     @if ($inspectionsNotAnswered->isEmpty())
         <p>Uffa, não há inspeções.</p>    
@@ -44,7 +44,7 @@
                     <td>{{ count($inspection->parts) }}</td>
                     <td>{{ $inspection->created_at }}</td>
                     <td>
-                        <a href="{{ route('response.new', ['inspection' => $inspection->id])}}" class="btn btn-primary">Iniciar</a>        
+                        <a href="{{ route('response.new', ['inspection' => $inspection->id])}}" class="btn btn-sm btn-primary">Iniciar</a>        
                     </td>
                 </tr>
                 @endforeach
@@ -52,10 +52,10 @@
         </table>
     @endif
 
-    <h1>Suas inspeções respondidas</h1>
+    <h1>Suas inspeções respondidas ou em andamento</h1>
 
     @if ($inspectionsAnswered->isEmpty())
-        <p>Uffa, não há inspeções.</p>    
+        <p>Não há inspeções.</p>    
     @else
         <table class="table">
             <thead>
@@ -77,11 +77,15 @@
                     <td>{{ $inspection->description }}</td>
                     <td>{{ $inspection->inspection_start }}</td>
                     <td>{{ $inspection->inspection_end }}</td>
-                    <td>{{ $inspection->attempts_per_operator }}</td>
+                    <td>{{$inspection->max_attempt}}/{{ $inspection->attempts_per_operator }}</td>
                     <td>{{ count($inspection->parts) }}</td>
                     <td>{{ $inspection->created_at }}</td>
                     <td>
-                        <a href="{{ route('respose.show.operator', ['inspection' => $inspection->id])}}" class="btn btn-primary">Revisar</a>        
+                        @if ($inspection->in_progress)
+                            <a href="{{ route('response.new', ['inspection' => $inspection->id])}}" class="btn btn-sm btn-primary">Próxima tentativa</a> 
+                        @else
+                            <a href="{{ route('respose.show.operator', ['inspection' => $inspection->id])}}" class="btn btn-sm btn-primary">Revisar</a>            
+                        @endif       
                     </td>
                 </tr>
                 @endforeach

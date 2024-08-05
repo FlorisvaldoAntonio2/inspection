@@ -87,6 +87,7 @@
                     <tr>
                         <th>Código da peça</th>
                         <th>Resposta</th>
+                        <th>Nº Tentativa</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -95,6 +96,7 @@
                         @if($response->user_id == $user->id)
                             <td>{{$response->part->code}}</td>
                             <td>{{strtoupper($response->user_opinion_status)}}</td>
+                            <td>{{$response->attempt}}º</td>
                         @endif
                     </tr>
                     @endforeach

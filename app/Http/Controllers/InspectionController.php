@@ -18,6 +18,7 @@ class InspectionController extends Controller
     {
         //operator
         if (!Gate::allows('is_admin')) {
+            //respondidas
             $inspectionsAnswered = Inspection::whereHas('users', function ($query) {
                 $query->where('user_id', Auth::id());
             })
@@ -26,6 +27,17 @@ class InspectionController extends Controller
             })
             ->where('enabled', true)->with('parts')->get();
 
+            $inspectionsAnswered->map(function ($inspection) {
+                $inspection->max_attempt = $inspection->responses->where('user_id', Auth::id())->max('attempt');
+                if($inspection->max_attempt >= $inspection->attempts_per_operator){
+                    $inspection->in_progress = false;
+                }else{
+                    $inspection->in_progress = true;
+                }
+                return $inspection;
+            });
+
+            //não respondidas
             $inspectionsNotAnswered = Inspection::whereHas('users', function ($query) {
                 $query->where('user_id', Auth::id());
             })->whereDoesntHave('responses', function ($query) {

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('responses', function (Blueprint $table) {
             $table->id();
             $table->enum('user_opinion_status', ['good', 'bad'])->default('good');
+            $table->string('comment', 500)->nullable(true);
             $table->integer('attempt')->default(1);
             $table->foreignId('inspection_id')->constrained();
             $table->foreignId('part_id')->constrained();

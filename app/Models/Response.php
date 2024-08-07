@@ -15,6 +15,7 @@ class Response extends Model
         'inspection_id',
         'attempt',
         'user_opinion_status',
+        'comment'
     ];
 
     public function part()

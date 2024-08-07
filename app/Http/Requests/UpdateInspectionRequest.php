@@ -28,6 +28,7 @@ class UpdateInspectionRequest extends FormRequest
             'attempts_per_operator' => ['required', 'integer'],
             'quantity_pieces' => ['integer'],
             'operators' => ['required', 'array'],
+            'comments' => ['string', 'max:500'],
         ];
     }
 }

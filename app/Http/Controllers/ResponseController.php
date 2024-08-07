@@ -7,6 +7,7 @@ use App\Http\Requests\StoreResponseRequest;
 use App\Http\Requests\UpdateResponseRequest;
 use App\Models\Inspection;
 use App\Models\Part;
+use stdClass;
 
 class ResponseController extends Controller
 {
@@ -46,17 +47,48 @@ class ResponseController extends Controller
      */
     public function store(StoreResponseRequest $request)
     {
-        $responsesParts = $request->except(['_token', '_method', 'inspection_id', 'attempt']);
-   
+        $responsesParts = $request->except(['_token', '_method', 'inspection_id', 'attempt', 'code-part']);
+
+        $parts = [];
+        $comments = [];
+
         foreach ($responsesParts as $key => $value) {
+            // Recuperar os campos que começam com 'part_'
+            if(substr($key, 0, 5) == 'part-'){
+                $parts[$key] = $value;
+            }
+            
+            // Recuperar os campos que começam com 'comment_'
+            if(substr($key, 0, 8) == 'comment-'){
+                $comments[$key] = $value;
+            }
+        }
+
+        //cria um objeto com o código da peça e o comentário
+        $requestParts = [];
+        foreach ($parts as $key => $value) {
+            $obj = new stdClass;
+            $obj->part = $key;
+            $obj->value = $value;
+            $obj->comment = null;
+            if(isset($comments['comment-'.$key])){
+                $obj->comment = $comments['comment-'.$key];
+            }
+            array_push( $requestParts, $obj );
+        }
+
+        // dd($requestParts);
+   
+        foreach ($requestParts as $part) {
             //remove 'part_' from key
-            $key = substr($key, 5);
+            $idPart = $part->part = substr($key, 5);
             Response::create([
-                'part_id' => $key,
-                'user_opinion_status' => $value,
+                'part_id' => $idPart,
+                'user_opinion_status' => $part->value,
                 'user_id' => auth()->user()->id,
                 'inspection_id' => $request->inspection_id,
                 'attempt' => $request->attempt,
+                'comment' => $part->comment,
             ]);
         }
 

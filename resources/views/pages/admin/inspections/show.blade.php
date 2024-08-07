@@ -82,12 +82,13 @@
             <table class="table table-striped" id="tableParts">
                 <thead>
                     <tr>
-                        <th colspan="3">Operador: {{strtoupper($user->name)}}</th>
+                        <th colspan="4">Operador: {{strtoupper($user->name)}}</th>
                     </tr>
                     <tr>
                         <th>Código da peça</th>
                         <th>Resposta</th>
                         <th>Nº Tentativa</th>
+                        <th>Cometário</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -97,6 +98,13 @@
                             <td>{{$response->part->code}}</td>
                             <td>{{strtoupper($response->user_opinion_status)}}</td>
                             <td>{{$response->attempt}}º</td>
+                            <td>
+                                @empty($response->comment)
+                                    Sem comentário
+                                @else
+                                    {{$response->comment}}
+                                @endempty
+                            </td>
                         @endif
                     </tr>
                     @endforeach

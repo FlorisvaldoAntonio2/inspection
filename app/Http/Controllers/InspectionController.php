@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Gate;
 
 class InspectionController extends Controller
 {
+    private $dashboard;
+    public function __construct()
+    {
+        $this->dashboard = new Dashboard();
+    }
     /**
      * Display a listing of the resource.
      */
@@ -108,12 +113,15 @@ class InspectionController extends Controller
             return redirect()->route('dashboard')->with(['message' => 'Você não tem permissão para acessar essa página', 'type' => 'danger']);
         }
 
+        $avg = $this->dashboard->calculateAverageInspectionScores($inspection);
+        // dd($avg);
         return view('pages.admin.inspections.show', [
             'inspection' => $inspection->load(
                 'parts',
                     'responses',
                     'users',
-            )
+            ),
+            'avg' => $avg,
         ]);
     }
 

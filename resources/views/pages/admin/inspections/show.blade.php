@@ -15,6 +15,8 @@
 
     <hr>
 
+    {{-- {{$avg[0]['average'][0]}} --}}
+
     <form action="#">
         @csrf
         @method('PATCH')
@@ -95,7 +97,7 @@
                     @foreach ($inspection->responses as $response)
                     <tr>
                         @if($response->user_id == $user->id)
-                            <td>{{$response->part->code}}</td>
+                            <td>{{$response->part->status}}</td>
                             <td>{{strtoupper($response->user_opinion_status)}}</td>
                             <td>{{$response->attempt}}º</td>
                             <td>
@@ -108,8 +110,18 @@
                         @endif
                     </tr>
                     @endforeach
+                    @foreach ($avg as $avgUser)
+                        @if($avgUser['id'] == $user->id)
+                            @foreach ($avgUser['average'] as $key => $average)
+                                <tr>
+                                    <td colspan="4">Média de acerto na tentativa Nº {{++$key}}: {{$average * 100}}%</td>
+                                </tr>
+                            @endforeach
+                        @endif
+                    @endforeach
                 </tbody>
             </table>
+
         @endforeach
     @endif
 @endsection

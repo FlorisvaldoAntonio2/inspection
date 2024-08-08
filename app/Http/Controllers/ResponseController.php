@@ -81,7 +81,7 @@ class ResponseController extends Controller
    
         foreach ($requestParts as $part) {
             //remove 'part_' from key
-            $idPart = $part->part = substr($key, 5);
+            $idPart = substr($part->part, 5);
             Response::create([
                 'part_id' => $idPart,
                 'user_opinion_status' => $part->value,

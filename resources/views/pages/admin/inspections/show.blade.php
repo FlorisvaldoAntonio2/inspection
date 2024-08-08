@@ -81,46 +81,47 @@
         <p>Não há respostas</p>
     @else
         @foreach ($inspection->users as $user)
-            <table class="table table-striped" id="tableParts">
-                <thead>
-                    <tr>
-                        <th colspan="4">Operador: {{strtoupper($user->name)}}</th>
-                    </tr>
-                    <tr>
-                        <th>Código da peça</th>
-                        <th>Resposta</th>
-                        <th>Nº Tentativa</th>
-                        <th>Cometário</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($inspection->responses as $response)
-                    <tr>
-                        @if($response->user_id == $user->id)
-                            <td>{{$response->part->status}}</td>
-                            <td>{{strtoupper($response->user_opinion_status)}}</td>
-                            <td>{{$response->attempt}}º</td>
-                            <td>
-                                @empty($response->comment)
-                                    Sem comentário
-                                @else
-                                    {{$response->comment}}
-                                @endempty
-                            </td>
-                        @endif
-                    </tr>
-                    @endforeach
-                    @foreach ($avg as $avgUser)
-                        @if($avgUser['id'] == $user->id)
-                            @foreach ($avgUser['average'] as $key => $average)
+            @for ($i = 1; $i <= $inspection->attempts_per_operator; $i++)
+    
+                <table class="table table-striped" id="tableParts">
+                    <thead>
+                        <tr>
+                            <th colspan="4">Operador: {{strtoupper($user->name)}} | Tentativa {{$i}}º</th>
+                        </tr>
+                        <tr>
+                            <th>Código da peça</th>
+                            <th>Resposta</th>
+                            <th>Nº Tentativa</th>
+                            <th>Cometário</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($inspection->responses as $response)
+                        <tr>
+                            @if($response->user_id == $user->id && $response->attempt == $i)
+                                <td>{{$response->part->code}}</td>
+                                <td>{{strtoupper($response->user_opinion_status)}}</td>
+                                <td>{{$response->attempt}}º</td>
+                                <td>
+                                    @empty($response->comment)
+                                        Sem comentário
+                                    @else
+                                        {{$response->comment}}
+                                    @endempty
+                                </td>
+                            @endif
+                        </tr>
+                        @endforeach
+                        @foreach ($avg as $avgUser)
+                            @if($avgUser['id'] == $user->id)
                                 <tr>
-                                    <td colspan="4">Média de acerto na tentativa Nº {{++$key}}: {{$average * 100}}%</td>
+                                    <td colspan="4">Média de acerto na tentativa: {{isset($avgUser['average'][$i - 1]) ? $avgUser['average'][$i - 1] * 100: 0}}%</td>
                                 </tr>
-                            @endforeach
-                        @endif
-                    @endforeach
-                </tbody>
-            </table>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            @endfor
 
         @endforeach
     @endif

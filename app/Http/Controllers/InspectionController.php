@@ -118,8 +118,8 @@ class InspectionController extends Controller
         return view('pages.admin.inspections.show', [
             'inspection' => $inspection->load(
                 'parts',
-                    'responses',
-                    'users',
+                'responses',
+                'users',
             ),
             'avg' => $avg,
         ]);

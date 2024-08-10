@@ -8,6 +8,8 @@ use App\Http\Requests\UpdateInspectionRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use App\Services\PHPSpreadsheetService;
+use Illuminate\Support\Facades\Storage;
 
 class InspectionController extends Controller
 {
@@ -206,5 +208,73 @@ class InspectionController extends Controller
         $inspection->save();
 
         return redirect()->route('inspection.index')->with(['message' => 'Inspeção desabilitada com Sucesso', 'type' => 'success']);
+    }
+
+    public function generateXlxs(Inspection $inspection)
+    {
+        if (!Gate::allows('is_admin')) {
+            return redirect()->route('dashboard')->with(['message' => 'Você não tem permissão para acessar essa página', 'type' => 'danger']);
+        }
+
+        $inspection = $inspection->load(
+            'parts',
+            'responses',
+            'users',
+        );
+        $cellsUsers = ['F11', 'I11', 'L11', 'O11', 'R11', 'U11', "X11", "AA11"];
+        $users = [];
+        //monta matriz com as peças e status
+        $cells = [];
+        foreach ($inspection->parts as $key =>$part) {
+            $key++;
+            $cells[] = [
+                $key, $part->id, $part->status == 'bad' ? 'NO GOOD' : 'GOOD'
+            ];
+        }
+
+        //monta matriz com as resposta dos operadores
+        foreach ($inspection->users as $user) {
+            array_push($users, [$user->name]);
+            foreach ($user->responses as $response) {
+                $cells = array_map(function ($cell) use ($response) {
+                    if ($cell[1] == $response->part_id) {
+                        array_push( $cell, $response->user_opinion_status == 'bad' ? 'NO GOOD' : 'GOOD');
+                    }
+                    return $cell;
+                }, $cells);
+            }
+        }
+
+        // dd($cells);
+
+        $sourcePath = storage_path('app/public/New-GRR.xlsx');
+        $dataActual = now()->format('d_m_Y_H_i_s');
+        $destinationPath = storage_path("app/public/GRR_{$dataActual}.xlsx");
+
+        // Copiar o arquivo para um novo local
+        copy($sourcePath, $destinationPath);
+
+        $spreadsheet = PHPSpreadsheetService::openSpreadsheet($destinationPath, 'Data Entry');
+        $sheet = $spreadsheet->getActiveSheet();
+        // set respostas
+        $sheet->fromArray($cells, null, 'C13');
+
+        //set nome dos usuários
+        foreach ($users as $key => $user) {
+            $sheet->setCellValue($cellsUsers[$key], $user[0]);
+        }
+
+        //set nome da inspeção
+        $sheet->setCellValue('I6', $inspection->name);
+        //set data da inspeção
+        $sheet->setCellValue('I5', $inspection->created_at->format('d/m/Y'));
+        //set ano inspeção
+        $sheet->setCellValue('I9', $inspection->created_at->format('Y'));
+
+        // $dataActual = now()->format('d/m/Y');
+        // $pathDest = storage_path("app/public/GRR_{$dataActual}.xlsx");
+        PHPSpreadsheetService::saveSpreadsheet($spreadsheet, $destinationPath);
+
+        return Storage::download("public/GRR_{$dataActual}.xlsx");
     }
 }

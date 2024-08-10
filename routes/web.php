@@ -16,6 +16,9 @@ Route::prefix('inspection')->group(function () {
             Route::get('/{inspection}', 'show')->name('inspection.show')->missing(function () {
                 return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
             });
+            Route::get('/generate/{inspection}', 'generateXlxs')->name('inspection.generate')->missing(function () {
+                return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
+            });
             Route::get('/edit/{inspection}', 'edit')->name('inspection.edit')->missing(function () {
                 return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
             });

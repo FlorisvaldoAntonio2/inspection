@@ -13,6 +13,8 @@
 
     <h1>Detalhes da inspeção</h1>
 
+    <a href="{{ route('inspection.generate', ['inspection' => $inspection->id]) }}" target="_blank" rel="noopener noreferrer">Baixar planilha</a>
+
     <hr>
 
     {{-- {{$avg[0]['average'][0]}} --}}

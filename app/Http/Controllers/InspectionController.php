@@ -236,12 +236,11 @@ class InspectionController extends Controller
         foreach ($inspection->users as $user) {
             array_push($users, [$user->name]);
             foreach ($user->responses as $response) {
-                $cells = array_map(function ($cell) use ($response) {
-                    if ($cell[1] == $response->part_id) {
-                        array_push( $cell, $response->user_opinion_status == 'bad' ? 'NO GOOD' : 'GOOD');
+                for($i = 0; $i < count($cells); $i++){
+                    if($cells[$i][1] == $response->part_id){
+                        array_push($cells[$i], $response->user_opinion_status == 'bad' ? 'NO GOOD' : 'GOOD');
                     }
-                    return $cell;
-                }, $cells);
+                }
             }
         }
 
@@ -265,11 +264,11 @@ class InspectionController extends Controller
         }
 
         //set nome da inspeção
-        $sheet->setCellValue('I6', $inspection->name);
+        $sheet->setCellValue('I6', $inspection->description);
         //set data da inspeção
-        $sheet->setCellValue('I5', $inspection->created_at->format('d/m/Y'));
+        $sheet->setCellValue('J5', $inspection->created_at->format('d/m/Y'));
         //set ano inspeção
-        $sheet->setCellValue('I9', $inspection->created_at->format('Y'));
+        $sheet->setCellValue('J9', $inspection->created_at->format('Y'));
 
         // $dataActual = now()->format('d/m/Y');
         // $pathDest = storage_path("app/public/GRR_{$dataActual}.xlsx");

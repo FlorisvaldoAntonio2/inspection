@@ -221,7 +221,7 @@ class InspectionController extends Controller
             'responses',
             'users',
         );
-        $cellsUsers = ['F11', 'I11', 'L11', 'O11', 'R11', 'U11', "X11", "AA11"];
+        $cellsUsers = ['E11', 'H11', 'K11', 'N11', 'R11', 'U11', "X11", "AA11"];
         $users = [];
         //monta matriz com as peças e status
         $cells = [];
@@ -244,9 +244,14 @@ class InspectionController extends Controller
             }
         }
 
+        //remover a coluna de id(index 1)
+        foreach ($cells as $key => $cell) {
+            unset($cells[$key][1]);
+        }
+
         // dd($cells);
 
-        $sourcePath = storage_path('app/public/New-GRR.xlsx');
+        $sourcePath = storage_path('app/public/GRR_BASICO.xlsx');
         $dataActual = now()->format('d_m_Y_H_i_s');
         $destinationPath = storage_path("app/public/GRR_{$dataActual}.xlsx");
 

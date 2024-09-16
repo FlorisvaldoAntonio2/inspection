@@ -1,2 +1,4 @@
 *
 !.gitignore
+# Manter o arquivo base.xlsx
+!GRR_BASICO.xlsx

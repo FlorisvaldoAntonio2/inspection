@@ -28,4 +28,21 @@ class StorePartRequest extends FormRequest
             'inspection_id' => ['required', 'integer'],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'code.required' => 'O campo código é obrigatório',
+            'code.string' => 'O campo código deve ser uma string',
+            'code.min' => 'O campo código deve ter no mínimo 3 caracteres',
+            'code.max' => 'O campo código deve ter no máximo 100 caracteres',
+            'description.required' => 'O campo descrição é obrigatório',
+            'description.string' => 'O campo descrição deve ser uma string',
+            'description.min' => 'O campo descrição deve ter no mínimo 3 caracteres',
+            'description.max' => 'O campo descrição deve ter no máximo 1000 caracteres',
+            'status.required' => 'O campo status é obrigatório',
+            'status.string' => 'O campo status deve ser uma string',
+            'status.in' => 'O campo status deve ser good ou bad'
+        ];
+    }
 }

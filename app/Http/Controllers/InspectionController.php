@@ -96,6 +96,11 @@ class InspectionController extends Controller
         }
 
         $selectedOperators = $request->input('operators');
+
+        if(empty($selectedOperators)){
+            return redirect()->back()->with(['message' => 'Selecione pelo menos um operador', 'type' => 'danger']);
+        }
+        
         $data = $request->except('operators');
 
         $inspection = Inspection::create($data);

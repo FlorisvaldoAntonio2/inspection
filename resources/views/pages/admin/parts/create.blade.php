@@ -15,7 +15,7 @@
         @include('partials.errors')
     @endif
 
-    <h1>Peças dessa inspeção</h1>
+    <h1>Peças da inspeção</h1>
 
     @if ($parts->isEmpty())
         <p>Não há peças cadastradas</p>
@@ -60,20 +60,20 @@
             <div class="row">
                 <div class="col-12 col-md-6">
                     <label class="form-label" for="code">Código</label>
-                    <input class="form-control" type="text" name="code" id="code" placeholder="Informe o código da peça">
+                    <input class="form-control" type="text" name="code" id="code" placeholder="Informe o código da peça" value="{{ old('code', $inspection->old) }}">
                 </div>
                 <div class="col-12 col-md-6">
                     <label class="form-label" for="status">Status</label>
                     <select class="form-select" name="status" id="status">
-                        <option value="good">Bom/Good</option>
-                        <option value="bad">Ruim/Bad</option>
+                        <option value="good" {{ old('status', $inspection->old) === "good" ? 'selected' : ''}}>Bom/Good</option>
+                        <option value="bad" {{ old('status', $inspection->old) === "bad" ? 'selected' : ''}}>Ruim/Bad</option>
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
                     <label class="form-label" for="description">Descrição</label>
-                    <textarea class="form-control" name="description" id="description" cols="30" rows="5" placeholder="Informe uma breve descrição"></textarea>
+                    <textarea class="form-control" name="description" id="description" cols="30" rows="5" placeholder="Informe uma breve descrição">{{ old('description', $inspection->old) }}</textarea>
                 </div>
             </div>
 

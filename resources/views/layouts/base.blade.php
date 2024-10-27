@@ -16,7 +16,7 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light shadow-sm mb-3">
-            <div class="container-fluid">
+            <div class="container">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -32,10 +32,21 @@
                         </li>
                     @endif
                 </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                <div class="d-flex">
+                    <div class="btn-group border">
+                        <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ Auth::user()->name }} <i class="bi bi-person-gear"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item disabled" href="#">Perfil</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <form action="{{route('logout')}}" method="post">
+                            @csrf
+                            <button type="submit" class="dropdown-item">Sair</button>
+                          </form>
+                        </ul>
+                      </div>
+                </div>
                 </div>
             </div>
         </nav>

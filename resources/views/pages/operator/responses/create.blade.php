@@ -47,12 +47,12 @@
                         @foreach ($inspection->parts as $parts)
                             <div class="col-12 col-md-4">
                                 <label class="form-label" for="part-{{$parts->id}}">Peça de código ({{$parts->code}})</label>
-                                <select class="form-select form-select-sm" name="part-{{$parts->id}}" id="part-{{$parts->id}}" code="{{$parts->code}}">
-                                    <option value="-1" disabled selected>Defina uma status</option>
+                                <select class="form-select form-select-sm" name="part-{{$parts->id}}" id="part-{{$parts->id}}" code="{{$parts->code}}" required>
+                                    <option value="" disabled selected>Defina uma status</option>
                                     <option class="text-success" value="good">Bom</option>
                                     <option class="text-danger" value="bad">Ruim</option>
                                 </select>
-                                <input class="form-control mt-1" type="text" name="comment-part-{{$parts->id}}" id="comment-part-{{$parts->id}}" placeholder="Descrição do Erro" maxlength="500" disabled hidden>
+                                <input class="form-control mt-1" type="text" name="comment-part-{{$parts->id}}" id="comment-part-{{$parts->id}}" placeholder="Descrição do Erro" maxlength="500" required hidden>
                             </div>
                         @endforeach
                     </div>

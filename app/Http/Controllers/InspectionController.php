@@ -226,8 +226,13 @@ class InspectionController extends Controller
             'responses',
             'users',
         );
-        $cellsUsers = ['E11', 'H11', 'K11', 'N11', 'R11', 'U11', "X11", "AA11"];
-        $users = [];
+
+        $cellsUsers = 
+                    [
+                        ['cell' => 'E11'], ['cell' => 'H11'], ['cell' => 'K11'], ['cell' => 'N11'], ['cell' => 'R11'], ['cell' => 'U11'],
+                        ['cell' => 'X11'], ['cell' => "AA11"]
+                    ];
+
         //monta matriz com as peças e status
         $cells = [];
         foreach ($inspection->parts as $key =>$part) {
@@ -238,12 +243,26 @@ class InspectionController extends Controller
         }
 
         //monta matriz com as resposta dos operadores
-        foreach ($inspection->users as $user) {
-            array_push($users, [$user->name]);
-            foreach ($user->responses as $response) {
+        foreach ($inspection->users as $index => $user) {;
+            $cellsUsers[$index]['user'] = $user->name;
+            //recupera as respostas do usuário nessa inspeção
+            $responses = $user->responses->where('inspection_id', $inspection->id);
+            
+            foreach ($responses as $response) {
                 for($i = 0; $i < count($cells); $i++){
                     if($cells[$i][1] == $response->part_id){
-                        array_push($cells[$i], $response->user_opinion_status == 'bad' ? 'NO GOOD' : 'GOOD');
+                        if(!isset($cellsUsers[$index]['responses'])){
+                            $cellsUsers[$index]['responses'] = [];
+                        }
+
+                        $arrayRegistro = [
+                            'part_id' => $response->part_id,
+                            'status' => $response->user_opinion_status == 'bad' ? 'NO GOOD' : 'GOOD',
+                            'attempt' => $response->attempt,
+                        ];
+
+                        array_push( $cellsUsers[$index]['responses'], $arrayRegistro);
+                        
                     }
                 }
             }
@@ -254,8 +273,6 @@ class InspectionController extends Controller
             unset($cells[$key][1]);
         }
 
-        // dd($cells);
-
         $sourcePath = storage_path('app/public/GRR_BASICO.xlsx');
         $dataActual = now()->format('d_m_Y_H_i_s');
         $destinationPath = storage_path("app/public/GRR_{$dataActual}.xlsx");
@@ -265,12 +282,23 @@ class InspectionController extends Controller
 
         $spreadsheet = PHPSpreadsheetService::openSpreadsheet($destinationPath, 'Data Entry');
         $sheet = $spreadsheet->getActiveSheet();
-        // set respostas
+
+        // set peças
         $sheet->fromArray($cells, null, 'C13');
 
-        //set nome dos usuários
-        foreach ($users as $key => $user) {
-            $sheet->setCellValue($cellsUsers[$key], $user[0]);
+        foreach($cellsUsers as $key => $user){ 
+            if(isset($user['user'])){
+               
+                $sheet->setCellValue($user['cell'], $user['user']);
+                
+                if(isset($user['responses'])){
+                    $dadosResponses = $this->converteArrayAssociativoEmArrayIndexado($user['responses']);
+                    foreach($user['responses'] as $response){
+                        $linhaInicio = $this->incrementCellReference($user['cell'], 2);
+                        $sheet->fromArray($dadosResponses, null, $linhaInicio );
+                    }
+                }
+            }
         }
 
         //set nome da inspeção
@@ -285,5 +313,27 @@ class InspectionController extends Controller
         PHPSpreadsheetService::saveSpreadsheet($spreadsheet, $destinationPath);
 
         return Storage::download("public/GRR_{$dataActual}.xlsx");
+    }
+
+    function incrementCellReference($cellReference, $increment) {
+        return preg_replace_callback('/(\D+)(\d+)/', function($matches) use ($increment) {
+            return $matches[1] . ($matches[2] + $increment);
+        }, $cellReference);
+    }
+
+    function converteArrayAssociativoEmArrayIndexado($arrayAssociativo) {
+        $arrayRetorno = [];
+        $cont = 0;
+        foreach($arrayAssociativo as $value){
+            if($value['attempt'] == 1){
+                $cont++;
+            }
+            array_push( $arrayRetorno, $value['status'] );
+        }
+        //divide o array um sub array em uma matriz
+        $arrayRetorno = array_chunk($arrayRetorno, $cont);
+        //inverte linhas para colunas
+        $arrayRetorno = array_map(null, ...$arrayRetorno);
+        return $arrayRetorno;
     }
 }

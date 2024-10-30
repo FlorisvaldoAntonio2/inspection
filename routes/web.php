@@ -34,6 +34,9 @@ Route::prefix('inspection')->group(function () {
             Route::delete('/{inspection}', 'destroy')->name('inspection.destroy')->missing(function () {
                 return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
             });
+            Route::get('/checkresponses/{inspection}', 'checkEveryoneResponded')->name('inspection.everyone')->missing(function () {
+                return redirect()->back()->with('message', 'Inspeção não encontrada!', 'type', 'alert-danger');
+            });
         });
     });
 });

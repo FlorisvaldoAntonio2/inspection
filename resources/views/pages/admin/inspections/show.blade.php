@@ -13,7 +13,7 @@
 
     <h1>Detalhes da inspeção</h1>
 
-    <a href="{{ route('inspection.generate', ['inspection' => $inspection->id]) }}" target="_blank" rel="noopener noreferrer">Baixar planilha</a>
+    <a class="btn btn-primary" href="{{ route('inspection.generate', ['inspection' => $inspection->id]) }}" target="_blank" rel="noopener noreferrer" id="btnGenerateXlxs">Baixar planilha</a>
 
     <hr>
 
@@ -127,5 +127,55 @@
 
         @endforeach
     @endif
+  
+    <!-- Modal -->
+    <div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Atenção!</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Nem todos os operadores responderam a inspeção, deseja continuar mesmo assim?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+            <a class="btn btn-primary" href="{{ route('inspection.generate', ['inspection' => $inspection->id]) }}" target="_blank" rel="noopener noreferrer">Continuar</a>
+            </div>
+        </div>
+        </div>
+    </div>
 @endsection
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('btnGenerateXlxs').addEventListener('click', function(event){
+            event.preventDefault();
+            //faz requisição para verificar se todos os operadores responderam
+            fetch('/inspection/checkresponses/{{ $inspection->id }}', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if(data.status == false){
+                    var myModal = new bootstrap.Modal(document.getElementById('warningModal'), {
+                        keyboard: false
+                    });
+
+                    myModal.show();
+                }
+                else{
+                    var url = '/inspection/generate/{{ $inspection->id }}';
+                    var win = window.open(url, '_blank');
+                    win.focus();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+</script>

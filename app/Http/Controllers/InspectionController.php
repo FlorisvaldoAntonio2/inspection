@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Services\PHPSpreadsheetService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 
 class InspectionController extends Controller
@@ -315,13 +316,31 @@ class InspectionController extends Controller
         return Storage::download("public/GRR_{$dataActual}.xlsx");
     }
 
-    function incrementCellReference($cellReference, $increment) {
+    public function checkEveryoneResponded(Inspection $inspection)
+    {
+        $users = $inspection->users;
+
+        foreach ($users as $user) {
+            if(!$this->userResponded($inspection, $user)){
+                return response()->json([
+                    'status' => false
+                ]);
+            }
+        }
+
+        return response()->json([
+            'status' => true
+        ]);
+
+    }
+
+    private function incrementCellReference($cellReference, $increment) {
         return preg_replace_callback('/(\D+)(\d+)/', function($matches) use ($increment) {
             return $matches[1] . ($matches[2] + $increment);
         }, $cellReference);
     }
 
-    function converteArrayAssociativoEmArrayIndexado($arrayAssociativo) {
+    private function converteArrayAssociativoEmArrayIndexado($arrayAssociativo) {
         $arrayRetorno = [];
         $cont = 0;
         foreach($arrayAssociativo as $value){
@@ -335,5 +354,16 @@ class InspectionController extends Controller
         //inverte linhas para colunas
         $arrayRetorno = array_map(null, ...$arrayRetorno);
         return $arrayRetorno;
+    }
+
+    private function userResponded(Inspection $inspection, User $user)
+    {
+        $responses = $inspection->responses->where('user_id', $user->id);
+        
+        if($responses->count() == $inspection->attempts_per_operator * $inspection->parts->count()){
+            return true;
+        }
+
+        return false;
     }
 }

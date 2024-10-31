@@ -349,10 +349,21 @@ class InspectionController extends Controller
             }
             array_push( $arrayRetorno, $value['status'] );
         }
-        //divide o array um sub array em uma matriz
-        $arrayRetorno = array_chunk($arrayRetorno, $cont);
-        //inverte linhas para colunas
-        $arrayRetorno = array_map(null, ...$arrayRetorno);
+        if($cont != count($arrayRetorno)){
+            //divide o array um sub array em uma matriz
+            $arrayRetorno = array_chunk($arrayRetorno, $cont);
+            //inverte linhas para colunas
+            $arrayRetorno = array_map(null, ...$arrayRetorno);
+        }
+        else{
+            // Transformar o array simples em uma matriz vertical
+            $arrayVertical = array_map(function($item) {
+                return [$item];
+            }, $arrayRetorno);
+
+            $arrayRetorno = $arrayVertical;
+        }
+
         return $arrayRetorno;
     }
 

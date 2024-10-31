@@ -40,6 +40,9 @@
                 <div class="col-12 col-md-4" data-bs-toggle="tooltip" data-bs-placement="top" title="No momento o Nº de repetições deve ser 3, em breve será possível modificar.">
                     <label class="form-label" for="attempts_per_operator">Nº de repetições:</label>
                     <input class="form-control disabled" type="number" name="attempts_per_operator" id="attempts_per_operator" min="1" value="3" readonly>
+                    <div class="text-danger">
+                        Atualmente o número de repetições é fixo em 3.
+                    </div>
                 </div>
             </div>
 

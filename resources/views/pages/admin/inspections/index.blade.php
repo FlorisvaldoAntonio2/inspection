@@ -46,7 +46,7 @@
                             <th>Peças</th>
                             <th>Respostas</th>
                             <th>Data de cadastro</th>
-                            <th>Ações</th>
+                            <th class="w-25">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -61,33 +61,45 @@
                             <td>{{$inspection->users_answered}} / {{ count($inspection->users) }}</td>
                             <td>{{ $inspection->created_at }}</td>
                             <td>
-                                <div class="button-group">
-                                <a href="{{ route('inspection.show', ['inspection' => $inspection->id]) }}" class="btn btn-sm btn-outline-success">Detalhes</a>
-
                                 @if ($inspection->users_answered === 0)
-                                    <a href="{{ route('inspection.edit', ['inspection' => $inspection->id]) }}" class="btn btn-sm btn-outline-primary">Editar</a>
-                                    <a href="{{ route('part.create', ['inspection' => $inspection->id]) }}" class="btn btn-sm btn-outline-info">Gerencia</a>
-                                    <form action="{{ route('inspection.destroy', ['inspection' => $inspection->id]) }}" method="POST">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
-                                    </form>  
+                                    <div class="row justify-content-around">
+                                        <div class="col-12 col-md-4 text-center">
+                                            <a href="{{ route('inspection.edit', ['inspection' => $inspection->id]) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+                                        </div>
+                                        <div class="col-12 col-md-4 text-center">
+                                            <a href="{{ route('part.create', ['inspection' => $inspection->id]) }}" class="btn btn-sm btn-outline-dark">Gerencia</a> 
+                                        </div>
+                                        <div class="col-12 col-md-4 text-center">
+                                            <form action="{{ route('inspection.destroy', ['inspection' => $inspection->id]) }}" method="POST">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+                                            </form> 
+                                        </div>
+                                    </div>
                                 @endif
 
-                                @if ($inspection->enabled)
-                                    <form action="{{ route('inspection.disabled', ['inspection' => $inspection->id]) }}" method="POST">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Bloquear</button>
-                                    </form>
-                                @else
-                                    <form action="{{ route('inspection.enabled', ['inspection' => $inspection->id]) }}" method="POST">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="btn btn-sm btn-outline-info">Liberar</button>
-                                    </form>
-                                @endif
+                                <div class="row justify-content-around">
+                                    <div class="col-12 col-md-4 text-center">
+                                        <a href="{{ route('inspection.show', ['inspection' => $inspection->id]) }}" class="btn btn-sm btn-outline-success">Detalhes</a>
+                                    </div>
+                                    <div class="col-12 col-md-4 text-center">
+                                        @if ($inspection->enabled)
+                                            <form action="{{ route('inspection.disabled', ['inspection' => $inspection->id]) }}" method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">Bloquear</button>
+                                            </form>
+                                        @else
+                                            <form action="{{ route('inspection.enabled', ['inspection' => $inspection->id]) }}" method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-sm btn-outline-info">Liberar</button>
+                                            </form>
+                                        @endif
+                                    </div>
                                 </div>
+                                
                             </td>
                         </tr>
                         @endforeach

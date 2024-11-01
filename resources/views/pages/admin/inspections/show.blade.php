@@ -50,30 +50,36 @@
 
     <hr>
 
-    <h2>Peças dessa inspeção</h2>
+    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseParts" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Peças dessa inspeção <i class="bi bi-chevron-down"></i>
+    </a>
 
-    @if ($inspection->parts->isEmpty())
-        <p>Não há peças cadastradas</p>
-    @else
-        <table class="table table-striped" id="tableParts">
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Descrição</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($inspection->parts as $part)
+    <div class="collapse" id="collapseParts">
+
+        @if ($inspection->parts->isEmpty())
+            <p>Não há peças cadastradas</p>
+        @else
+            <table class="table table-striped" id="tableParts">
+                <thead>
                     <tr>
-                        <td>{{$part->code}}</td>
-                        <td>{{$part->description}}</td>
-                        <td>{{strtoupper($part->status)}}</td>
+                        <th>Código</th>
+                        <th>Descrição</th>
+                        <th>Status</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @endif
+                </thead>
+                <tbody>
+                    @foreach ($inspection->parts as $part)
+                        <tr>
+                            <td>{{$part->code}}</td>
+                            <td>{{$part->description}}</td>
+                            <td>{{strtoupper($part->status)}}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
+
+    </div>
 
     <hr>
 
@@ -82,48 +88,55 @@
     @if ($inspection->responses->isEmpty())
         <p>Não há respostas</p>
     @else
+    @foreach ($inspection->users as $user)
+        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseUser{{$user->id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+            {{$user->name}} <i class="bi bi-chevron-down"></i>
+        </a>
+    @endforeach
         @foreach ($inspection->users as $user)
-            @for ($i = 1; $i <= $inspection->attempts_per_operator; $i++)
-    
-                <table class="table table-striped" id="tableParts">
-                    <thead>
-                        <tr>
-                            <th colspan="4">Operador: {{strtoupper($user->name)}} | Tentativa {{$i}}º</th>
-                        </tr>
-                        <tr>
-                            <th>Código da peça</th>
-                            <th>Resposta</th>
-                            <th>Nº Tentativa</th>
-                            <th>Cometário</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($inspection->responses as $response)
-                        <tr>
-                            @if($response->user_id == $user->id && $response->attempt == $i)
-                                <td>{{$response->part->code}}</td>
-                                <td>{{strtoupper($response->user_opinion_status)}}</td>
-                                <td>{{$response->attempt}}º</td>
-                                <td>
-                                    @empty($response->comment)
-                                        Sem comentário
-                                    @else
-                                        {{$response->comment}}
-                                    @endempty
-                                </td>
-                            @endif
-                        </tr>
-                        @endforeach
-                        @foreach ($avg as $avgUser)
-                            @if($avgUser['id'] == $user->id)
-                                <tr>
-                                    <td colspan="4">Média de acerto na tentativa: {{isset($avgUser['average'][$i - 1]) ? $avgUser['average'][$i - 1] * 100: 0}}%</td>
-                                </tr>
-                            @endif
-                        @endforeach
-                    </tbody>
-                </table>
-            @endfor
+            <div class="collapse" id="collapseUser{{$user->id}}">
+                @for ($i = 1; $i <= $inspection->attempts_per_operator; $i++)
+        
+                    <table class="table table-striped" id="tableParts">
+                        <thead>
+                            <tr>
+                                <th colspan="4">Operador: {{strtoupper($user->name)}} | Tentativa {{$i}}º</th>
+                            </tr>
+                            <tr>
+                                <th>Código da peça</th>
+                                <th>Resposta</th>
+                                <th>Nº Tentativa</th>
+                                <th>Cometário</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($inspection->responses as $response)
+                            <tr>
+                                @if($response->user_id == $user->id && $response->attempt == $i)
+                                    <td>{{$response->part->code}}</td>
+                                    <td>{{strtoupper($response->user_opinion_status)}}</td>
+                                    <td>{{$response->attempt}}º</td>
+                                    <td>
+                                        @empty($response->comment)
+                                            Sem comentário
+                                        @else
+                                            {{$response->comment}}
+                                        @endempty
+                                    </td>
+                                @endif
+                            </tr>
+                            @endforeach
+                            @foreach ($avg as $avgUser)
+                                @if($avgUser['id'] == $user->id)
+                                    <tr>
+                                        <td colspan="4">Média de acerto na tentativa: {{isset($avgUser['average'][$i - 1]) ? $avgUser['average'][$i - 1] * 100: 0}}%</td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endfor
+            </div>
 
         @endforeach
     @endif
@@ -161,7 +174,6 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 if(data.status == false){
                     var myModal = new bootstrap.Modal(document.getElementById('warningModal'), {
                         keyboard: false

@@ -64,16 +64,16 @@
                                 @if ($inspection->users_answered === 0)
                                     <div class="row justify-content-around">
                                         <div class="col-12 col-md-4 text-center">
-                                            <a href="{{ route('inspection.edit', ['inspection' => $inspection->id]) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+                                            <a href="{{ route('inspection.edit', ['inspection' => $inspection->id]) }}" class="btn btn-sm btn-outline-primary w-100">Modificar</a>
                                         </div>
                                         <div class="col-12 col-md-4 text-center">
-                                            <a href="{{ route('part.create', ['inspection' => $inspection->id]) }}" class="btn btn-sm btn-outline-dark">Gerencia</a> 
+                                            <a href="{{ route('part.create', ['inspection' => $inspection->id]) }}" class="btn btn-sm btn-outline-dark w-100">Gerenciar</a> 
                                         </div>
                                         <div class="col-12 col-md-4 text-center">
                                             <form action="{{ route('inspection.destroy', ['inspection' => $inspection->id]) }}" method="POST">
                                                 @csrf
                                                 @method('delete')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger w-100">Excluir</button>
                                             </form> 
                                         </div>
                                     </div>
@@ -81,22 +81,24 @@
 
                                 <div class="row justify-content-around">
                                     <div class="col-12 col-md-4 text-center">
-                                        <a href="{{ route('inspection.show', ['inspection' => $inspection->id]) }}" class="btn btn-sm btn-outline-success">Detalhes</a>
+                                        <a href="{{ route('inspection.show', ['inspection' => $inspection->id]) }}" class="btn btn-sm btn-outline-success w-100">Detalhes</a>
                                     </div>
                                     <div class="col-12 col-md-4 text-center">
                                         @if ($inspection->enabled)
                                             <form action="{{ route('inspection.disabled', ['inspection' => $inspection->id]) }}" method="POST">
                                                 @csrf
                                                 @method('PATCH')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">Bloquear</button>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger w-100">Bloquear</button>
                                             </form>
                                         @else
                                             <form action="{{ route('inspection.enabled', ['inspection' => $inspection->id]) }}" method="POST">
                                                 @csrf
                                                 @method('PATCH')
-                                                <button type="submit" class="btn btn-sm btn-outline-info">Liberar</button>
+                                                <button type="submit" class="btn btn-sm btn-outline-info w-100">Liberar</button>
                                             </form>
                                         @endif
+                                    </div>
+                                    <div class="col-12 col-md-4 text-center">
                                     </div>
                                 </div>
                                 

@@ -41,6 +41,10 @@
                 <input class="form-control" type="datetime-local" name="inspection_end" id="inspection_end" value="{{$inspection->inspection_end}}" readonly>
             </div>
             <div class="col-12 col-md-6">
+                <label class="form-label" for="inspection_end">Produto/Part Number:</label>
+                <input class="form-control" type="text" name="product" id="product" value="{{$inspection->product}}">
+            </div>
+            <div class="col-12 col-md-6">
                 <label class="form-label" for="attempts_per_operator">Nº de repetições:</label>
                 <input class="form-control" type="number" name="attempts_per_operator" id="attempts_per_operator" value="{{$inspection->attempts_per_operator}}" readonly>
             </div>

@@ -302,12 +302,15 @@ class InspectionController extends Controller
             }
         }
 
+        
+        //set data da inspeção
+        $sheet->setCellValue('I5', $inspection->created_at->format('d/m/Y'));
         //set nome da inspeção
         $sheet->setCellValue('I6', $inspection->description);
-        //set data da inspeção
-        $sheet->setCellValue('J5', $inspection->created_at->format('d/m/Y'));
+        //set produto
+        $sheet->setCellValue('I7', $inspection->product);
         //set ano inspeção
-        $sheet->setCellValue('J9', $inspection->created_at->format('Y'));
+        $sheet->setCellValue('I9', $inspection->created_at->format('Y'));
 
         // $dataActual = now()->format('d/m/Y');
         // $pathDest = storage_path("app/public/GRR_{$dataActual}.xlsx");

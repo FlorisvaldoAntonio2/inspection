@@ -62,7 +62,7 @@
                             <td>{{ $inspection->created_at }}</td>
                             <td>
                                 @if ($inspection->users_answered === 0)
-                                    <div class="row justify-content-around">
+                                    <div class="row justify-content-around mb-md-2">
                                         <div class="col-12 col-md-4 text-center">
                                             <a href="{{ route('inspection.edit', ['inspection' => $inspection->id]) }}" class="btn btn-sm btn-outline-primary w-100">Modificar</a>
                                         </div>
@@ -113,9 +113,4 @@
     
 @endsection
 
-<style>
-.button-group {
-    
-}
-</style>
 

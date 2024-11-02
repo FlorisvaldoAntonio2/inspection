@@ -28,16 +28,19 @@
             </div>
 
             <div class="row">
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-3">
                     <label class="form-label"  for="inspection_start">Inicio da inspeção:</label>
                     <input class="form-control" type="datetime-local" name="inspection_start" id="inspection_start" value="{{now()}}">
                 </div>
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-3">
                     <label class="form-label" for="inspection_end">Fim da inspeção:</label>
                     <input class="form-control" type="datetime-local" name="inspection_end" id="inspection_end" value{{old('inspection_end')}}>
                 </div>
-
-                <div class="col-12 col-md-4" data-bs-toggle="tooltip" data-bs-placement="top" title="No momento o Nº de repetições deve ser 3, em breve será possível modificar.">
+                <div class="col-12 col-md-3">
+                    <label class="form-label" for="inspection_end">Produto/Part Number:</label>
+                    <input class="form-control" type="text" name="product" id="product" value{{old('product')}}>
+                </div>
+                <div class="col-12 col-md-3" data-bs-toggle="tooltip" data-bs-placement="top" title="No momento o Nº de repetições deve ser 3, em breve será possível modificar.">
                     <label class="form-label" for="attempts_per_operator">Nº de repetições:</label>
                     <input class="form-control disabled" type="number" name="attempts_per_operator" id="attempts_per_operator" min="1" value="3" readonly>
                     <div class="text-danger">

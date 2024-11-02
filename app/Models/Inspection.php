@@ -16,6 +16,7 @@ class Inspection extends Model
         'inspection_end',
         'attempts_per_operator',
         'enabled',
+        'product',
     ];
 
     public function users()

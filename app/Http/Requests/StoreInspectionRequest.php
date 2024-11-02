@@ -28,6 +28,7 @@ class StoreInspectionRequest extends FormRequest
             'attempts_per_operator' => ['required', 'integer'],
             'quantity_pieces' => ['integer'],
             'operators' => ['required', 'array'],
+            'product' => ['required', 'string', 'max:255'],
         ];
     }
 
@@ -46,6 +47,8 @@ class StoreInspectionRequest extends FormRequest
             'attempts_per_operator.integer' => 'O número de tentativas por operador deve ser um número inteiro',
             'quantity_pieces.integer' => 'A quantidade de peças deve ser um número inteiro',
             'operators.required' => 'Pelos menos um operador deve ser selecionado',
+            'product.required' => 'O produto é obrigatório',
+            'product.max' => 'O produto deve ter no máximo 255 caracteres',
         ];
     }
 }

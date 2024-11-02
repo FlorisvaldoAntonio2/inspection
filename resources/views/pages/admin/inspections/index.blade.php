@@ -35,7 +35,7 @@
     @else
         <div class="row">
             <div class="col-12 m-2 table-responsive">
-                <table class="table align-middle">
+                <table class="table align-middle table-hover">
                     <thead>
                         <tr>
                             <th>#</th>

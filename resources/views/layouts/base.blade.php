@@ -31,6 +31,9 @@
                             <a class="nav-link" href="{{route('inspection.create')}}">Nova inspeção</a>
                         </li>
                     @endif
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{route('help')}}">Ajuda</a>
+                    </li>
                 </ul>
                 <div class="d-flex">
                     <div class="btn-group border">

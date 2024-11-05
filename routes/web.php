@@ -81,6 +81,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/help', function () {
+    return view('pages/admin/help/index');
+})->name('help');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

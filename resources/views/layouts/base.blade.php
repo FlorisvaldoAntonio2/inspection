@@ -38,7 +38,7 @@
                 <div class="d-flex">
                     <div class="btn-group border">
                         <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ Auth::user()->name }} <i class="bi bi-person-gear"></i>
+                            {{ Auth::user()->name ?? "Visitante" }} <i class="bi bi-person-gear"></i>
                         </button>
                         <ul class="dropdown-menu">
                           <li><a class="dropdown-item disabled" href="#">Perfil</a></li>

@@ -230,8 +230,8 @@ class InspectionController extends Controller
 
         $cellsUsers = 
                     [
-                        ['cell' => 'E11'], ['cell' => 'H11'], ['cell' => 'K11'], ['cell' => 'N11'], ['cell' => 'R11'], ['cell' => 'U11'],
-                        ['cell' => 'X11'], ['cell' => "AA11"]
+                        ['cell' => 'E11'], ['cell' => 'H11'], ['cell' => 'K11'], ['cell' => 'N11'], ['cell' => 'Q11'], ['cell' => 'T11'],
+                        ['cell' => 'W11'], ['cell' => "Z11"]
                     ];
 
         //monta matriz com as peças e status

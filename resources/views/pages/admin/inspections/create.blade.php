@@ -65,6 +65,9 @@
                     </div>
                 @endforeach
             @endif
+            <div class="text-danger">
+                Atualmente o número máximo de operadores por inspeção é 8.
+            </div>
 
             <input class="btn btn-primary mt-3" type="submit" value="Cadastrar">
         </fieldset>

@@ -63,6 +63,9 @@
                     <label class="form-check-label" for="operators-{{$operator->id}}">{{ ucfirst($operator->name)}}</label>
                 </div>
             @endforeach
+            <div class="text-danger">
+                Atualmente o número máximo de operadores por inspeção é 8.
+            </div>
         </fieldset>
 
         <input class="btn btn-primary mt-3" type="submit" value="Atualizar">

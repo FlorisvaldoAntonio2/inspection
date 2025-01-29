@@ -84,7 +84,8 @@
                         @if ($inspection->in_progress)
                             <a href="{{ route('response.new', ['inspection' => $inspection->id])}}" class="btn btn-sm btn-primary">Próxima tentativa</a> 
                         @else
-                            <a href="{{ route('respose.show.operator', ['inspection' => $inspection->id])}}" class="btn btn-sm btn-primary">Revisar</a>            
+                            <a href="#" class="btn btn-sm btn-success disabled">Finalizado</a>
+                            {{-- <a href="{{ route('respose.show.operator', ['inspection' => $inspection->id])}}" class="btn btn-sm btn-primary disabled" title="Desativado pelo administrador">Revisar</a>             --}}
                         @endif       
                     </td>
                 </tr>

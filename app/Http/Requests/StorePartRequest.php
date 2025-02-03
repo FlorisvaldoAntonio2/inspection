@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\UniquePartCode;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePartRequest extends FormRequest
@@ -22,7 +23,7 @@ class StorePartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => ['required', 'string', 'min:3', 'max:100'],
+            'code' => ['required', 'string', 'min:3', 'max:100', new UniquePartCode($this->inspection_id)],
             'description' => ['required', 'string', 'min:3', 'max:1000'],
             'status' => ['required', 'string', 'in:good,bad'],
             'inspection_id' => ['required', 'integer'],

@@ -77,6 +77,22 @@ Route::prefix('response')->group(function () {
     });
 });
 
+Route::prefix('operator')->group(function () {
+
+    Route::middleware(['auth', 'verified'])->group(function () {
+
+        Route::controller(App\Http\Controllers\UserController::class)->group(function () {
+            Route::get('/', 'index')->name('operator.index');
+            Route::delete('/{user}', 'destroy')->name('operator.destroy')->missing(function () {
+                return redirect()->back()->with('message', 'Operador não encontrado!', 'type', 'danger');
+            });
+            Route::patch('/{user}', 'reactive')->name('operator.reactive')->withTrashed()->missing(function () {
+                return redirect()->back()->with('message', 'Operador não encontrado!', 'type', 'danger');
+            });
+        });
+    });
+});
+
 Route::get('/', function () {
     return view('welcome');
 });

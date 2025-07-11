@@ -243,8 +243,6 @@ class InspectionController extends Controller
             ];
         }
 
-        // dd($cells);
-
         //monta matriz com as resposta dos operadores
         foreach ($inspection->users as $index => $user) {;
             $cellsUsers[$index]['user'] = $user->name;
@@ -270,7 +268,7 @@ class InspectionController extends Controller
                 }
             }
         }
-        // dd($cellsUsers);
+
         //remover a coluna de id(index 1)
         foreach ($cells as $key => $cell) {
             unset($cells[$key][1]);

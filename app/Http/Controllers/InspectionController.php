@@ -243,6 +243,8 @@ class InspectionController extends Controller
             ];
         }
 
+        // dd($cells);
+
         //monta matriz com as resposta dos operadores
         foreach ($inspection->users as $index => $user) {;
             $cellsUsers[$index]['user'] = $user->name;
@@ -268,13 +270,20 @@ class InspectionController extends Controller
                 }
             }
         }
-
+        // dd($cellsUsers);
         //remover a coluna de id(index 1)
         foreach ($cells as $key => $cell) {
             unset($cells[$key][1]);
         }
 
-        $sourcePath = storage_path('app/public/GRR_BASICO.xlsx');
+        if($inspection->attempts_per_operator == 2){
+            $sourcePath = storage_path('app/public/GRR_BASICO_2.xlsx');
+        }
+        else if($inspection->attempts_per_operator == 3){
+            $sourcePath = storage_path('app/public/GRR_BASICO.xlsx');
+        }
+
+        
         $dataActual = now()->format('d_m_Y_H_i_s');
         $destinationPath = storage_path("app/public/GRR_{$dataActual}.xlsx");
 
